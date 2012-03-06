@@ -16,6 +16,7 @@
  * @category  Validate
  * @package   Validate_PL
  * @author    Piotr Klaban <makler@man.torun.pl>
+ * @author    Pawel Olejniczak <pawel.olejniczak@gmail.com>
  * @copyright 1997-2005 Piotr Klaban
  * @license   http://www.opensource.org/licenses/bsd-license.php  new BSD
  * @version   CVS: $Id$
@@ -207,6 +208,92 @@ class Validate_PL
         }
 
         return true;
+    }
+
+    /**
+     * Validates a PL Postal Code format (ZIP code)
+     *
+     * @param string $postalCode the ZIP code to validate
+     * @param bool   $strong     optional; strong checks (e.g. against a list 
+     *                           of postcodes) (not implanted)
+     *
+     * @return boolean TRUE if code is valid, FALSE otherwise
+     * @access public
+     * @static
+     */
+    function postalCode($postalCode, $strong = false)
+    {
+        return (bool)preg_match('/^\d{2}-\d{3}$/', $postalCode);
+    }
+
+    /**
+     * Validates a car registration number
+     *
+     * @param string $reg the registration number
+     *
+     * @return bool
+     * @access public
+     * @static
+     */
+    function carReg($reg)
+    {
+        $pregs = array(
+            // 2 letter district
+            "[a-z]{2}\d{5}",
+            "[a-z]{2}\d{4}[a-z]{1}",
+            "[a-z]{2}\d{3}[a-z]{2}",
+            "[a-z]{2}\d{1}[a-z]{1}\d{3}",
+            "[a-z]{2}\d{1}[a-z]{2}\d{2}",
+
+            // 3 letter district
+            "[a-z]{3}[a-z]{1}\d{3}",
+            "[a-z]{3}\d{2}[a-z]{2}",
+            "[a-z]{3}\d{1}[a-z]{1}\d{2}",
+            "[a-z]{3}\d{2}[a-z]{1}\d{1}",
+            "[a-z]{3}\d{1}[a-z]{2}\d{1}",
+            "[a-z]{3}[a-z]{2}\d{2}",
+            "[a-z]{3}\d{5}",
+            "[a-z]{3}\d{4}[a-z]{1}",
+            "[a-z]{3}\d{3}[a-z]{2}",
+            "[a-z]{3}[a-z]{1}\d{2}[a-z]{1}",
+            "[a-z]{3}[a-z]{1}\d{1}[a-z]{2}",
+
+            // bikes
+            "[a-z]{2}\d{4}",
+            "[a-z]{2}\d{3}[a-z]{1}",
+            "[a-z]{3}[a-z]{1}\d{3}", // deprecated
+
+            // temporaty
+            "[a-z]{1}\d{1}\d{4}",
+            "[a-z]{1}\d{1}\d{3}B",
+
+            // individual
+            "[a-z]{1}\d{1}[a-z]{3}[a-z0-9]{0,2}",
+
+            // classic
+            "[a-z]{2}\d{2}[a-z]{1}",
+            "[a-z]{2}\d{3}",
+            "[a-z]{3}\d{1}[a-z]{1}",
+            "[a-z]{3}\d{2}",
+            "[a-z]{3}[a-z]{1}\d{1}",
+
+            // diplomatic
+            "W\d{6}",
+
+            // military
+            "U[abcdegijk]\d{4,5}T?",
+
+            // special services
+            "H[apmwkbcsn][a-z][a-z]{1}\d{3}",
+            "H[apmwkbcsn][a-z]\d{2}[a-z]{2}"
+
+            );
+        foreach ($pregs as $preg) {
+            if (preg_match('/^'.$preg.'$/i', $reg)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 ?>
