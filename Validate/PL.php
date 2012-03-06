@@ -185,7 +185,7 @@ class Validate_PL
      */
     function region($regon)
     {
-        static $weights_regon = array(8,9,2,3,4,5,6,7);
+        static $weights_regon       = array(8,9,2,3,4,5,6,7);
         static $weights_regon_local = array(2,4,8,5,0,9,7,3,6,1,2,4,8);
 
         // remove any dashes, spaces, returns, tabs or slashes
