@@ -7,7 +7,10 @@
  * NIP
  * Bank Numbers
  * PESEL
- * REGON</description>
+ * REGON
+ * Postal codes
+ * Region codes and names
+ * Car registration numbers</description>
  <lead>
   <name>Piotr Klaban</name>
   <user>makler</user>
@@ -34,8 +37,8 @@ Fixed Bug #12152 - PHPCS
  <contents>
   <dir baseinstalldir="/" name="/">
    <file baseinstalldir="/" md5sum="01b1d404c268df4e9f5341e41dea2954" name="tests/validate_functions.inc" role="test" />
-   <file baseinstalldir="/" md5sum="0b056f1a212896c04884e5ab17cdaab8" name="tests/validate_PL.phpt" role="test" />
-   <file baseinstalldir="/" md5sum="9f232223aaab4cbbf7699097f076f830" name="Validate/PL.php" role="php" />
+   <file baseinstalldir="/" md5sum="9fb981a269f734ba7cad0ea3fb11a646" name="tests/validate_PL.phpt" role="test" />
+   <file baseinstalldir="/" md5sum="b2ee458e4882b5b6fb34950c9b20820d" name="Validate/PL.php" role="php" />
    <file baseinstalldir="/" md5sum="f8790e48b597dff12a643e08e9be3fab" name="LICENSE" role="doc" />
   </dir>
  </contents>
@@ -89,6 +92,21 @@ QA release.
 Updated to package 2.0
 Fixed Bug #8565 - php doc element wrong
 Fixed Bug #12152 - PHPCS
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.5.3</release>
+    <api>0.5.3</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2012-03-06</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+   <notes>
+Added postal code, car registration number and region validators.
    </notes>
   </release>
  </changelog>
