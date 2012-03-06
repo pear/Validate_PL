@@ -159,18 +159,35 @@ class Validate_PL
     }
 
     /**
-     * Validates REGON (Polish statistical national economy register)
+     * Validates province code
      *
-     * Sprawdza REGON (Rejestr Gospodarki Narodowej)
-     * http://chemeng.p.lodz.pl/zylla/ut/nip-rego.html
+     * @param string $region 2 digit string
      *
-     * @param string $regon 9- or 14- digit number to validate
+     * @return bool
+     * @see http://pl.wikipedia.org/wiki/Wojew%C3%B3dztwo
+     */
+    function region($region)
+    {
+        $regions = array('02','04','06','08','10','12','14','16','18',
+                         '20','22','24','26','28','30','32' );
+        return in_array($region, $regions);
+    }
+
+    /**
+     * Validates full province name
+     *
+     * @param string $region full name
      *
      * @return bool
      */
-    function regon($regon)
+    function regionFull($region)
     {
-        return Validate_PL::region($regon);
+        $regions = array('dolnośląskie','kujawsko-pomorskie','lubelskie',
+                         'lubuskie','mazowieckie','małopolskie','opolskie',
+                         'podkarpackie','podlaskie','pomorskie',
+                         'warmińsko-mazurskie','wielkopolskie','zachodniopomorskie',
+                         'łódzkie','śląskie','świętokrzyskie' );
+        return in_array($region, $regions);
     }
 
     /**
@@ -183,7 +200,7 @@ class Validate_PL
      *
      * @return bool
      */
-    function region($regon)
+    function regon($regon)
     {
         static $weights_regon       = array(8,9,2,3,4,5,6,7);
         static $weights_regon_local = array(2,4,8,5,0,9,7,3,6,1,2,4,8);
@@ -218,8 +235,7 @@ class Validate_PL
      *                           of postcodes) (not implanted)
      *
      * @return boolean TRUE if code is valid, FALSE otherwise
-     * @access public
-     * @static
+     * @see http://pl.wikipedia.org/wiki/Kod_pocztowy#Kody_pocztowe_w_Polsce
      */
     function postalCode($postalCode, $strong = false)
     {
@@ -232,8 +248,7 @@ class Validate_PL
      * @param string $reg the registration number
      *
      * @return bool
-     * @access public
-     * @static
+     * @see http://pl.wikipedia.org/wiki/Polskie_tablice_rejestracyjne
      */
     function carReg($reg)
     {
@@ -285,9 +300,7 @@ class Validate_PL
 
             // special services
             "H[apmwkbcsn][a-z][a-z]{1}\d{3}",
-            "H[apmwkbcsn][a-z]\d{2}[a-z]{2}"
-
-            );
+            "H[apmwkbcsn][a-z]\d{2}[a-z]{2}");
         foreach ($pregs as $preg) {
             if (preg_match('/^'.$preg.'$/i', $reg)) {
                 return true;

@@ -17,7 +17,7 @@ $validate = new Validate_PL;
 echo "Test Validate_PL\n";
 echo "****************\n";
 
-$nips = array ("7680002466","3385035171",);
+$nips = array("7680002466","3385035171",);
 $regons = array("590096454", "590096455","002188077");
 $pesels = array("40121008916","60052219867","33090901995","49110603787",
                 "14665303253","42176454020","30261330924","18659635322");
@@ -32,6 +32,8 @@ $carRegs = array("XY12345","XY1234A","XY123AC","XY1A234",
 				 "X1ABC23","XY12A","XY123","XYZ1A","XYZ12",
 				 "XYZA1","W123456","UA12345","UA1234","UA12345T",
 				 "HPPE057");
+$regionCodes = array("00","02");
+$regionNames = array("pomorskie","jakiestam");
 
 echo "\nTest NIP\n";
 foreach($nips as $nip) {
@@ -56,6 +58,14 @@ foreach($postalCodes as $postalCode) {
 echo "\nTest Car Registration Number\n";
 foreach($carRegs as $carReg) {
     printf("%s: %s\n", $carReg, $noYes[$validate->carReg($carReg)]);
+}
+echo "\nTest Region Codes\n";
+foreach($regionCodes as $code) {
+    printf("%s: %s\n", $code, $noYes[$validate->region($code)]);
+}
+echo "\nTest Region Names\n";
+foreach($regionNames as $name) {
+    printf("%s: %s\n", $name, $noYes[$validate->regionFull($name)]);
 }
 exit(0);
 ?>
@@ -132,3 +142,11 @@ UA12345: OK
 UA1234: OK
 UA12345T: OK
 HPPE057: OK
+
+Test Region Codes
+00: KO
+02: OK
+
+Test Region Names
+pomorskie: OK
+jakiestam: KO
