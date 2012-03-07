@@ -16,6 +16,7 @@
  * @category  Validate
  * @package   Validate_PL
  * @author    Piotr Klaban <makler@man.torun.pl>
+ * @author    Pawel Olejniczak <pawel.olejniczak@gmail.com>
  * @copyright 1997-2005 Piotr Klaban
  * @license   http://www.opensource.org/licenses/bsd-license.php  new BSD
  * @version   CVS: $Id$
@@ -158,18 +159,35 @@ class Validate_PL
     }
 
     /**
-     * Validates REGON (Polish statistical national economy register)
+     * Validates province code
      *
-     * Sprawdza REGON (Rejestr Gospodarki Narodowej)
-     * http://chemeng.p.lodz.pl/zylla/ut/nip-rego.html
+     * @param string $region 2 digit string
      *
-     * @param string $regon 9- or 14- digit number to validate
+     * @return bool
+     * @see http://pl.wikipedia.org/wiki/Wojew%C3%B3dztwo
+     */
+    function region($region)
+    {
+        $regions = array('02','04','06','08','10','12','14','16','18',
+                         '20','22','24','26','28','30','32' );
+        return in_array($region, $regions);
+    }
+
+    /**
+     * Validates full province name
+     *
+     * @param string $region full name
      *
      * @return bool
      */
-    function regon($regon)
+    function regionFull($region)
     {
-        return Validate_PL::region($regon);
+        $regions = array('dolnośląskie','kujawsko-pomorskie','lubelskie',
+                         'lubuskie','mazowieckie','małopolskie','opolskie',
+                         'podkarpackie','podlaskie','pomorskie',
+                         'warmińsko-mazurskie','wielkopolskie','zachodniopomorskie',
+                         'łódzkie','śląskie','świętokrzyskie' );
+        return in_array($region, $regions);
     }
 
     /**
@@ -182,9 +200,9 @@ class Validate_PL
      *
      * @return bool
      */
-    function region($regon)
+    function regon($regon)
     {
-        static $weights_regon = array(8,9,2,3,4,5,6,7);
+        static $weights_regon       = array(8,9,2,3,4,5,6,7);
         static $weights_regon_local = array(2,4,8,5,0,9,7,3,6,1,2,4,8);
 
         // remove any dashes, spaces, returns, tabs or slashes
@@ -207,6 +225,88 @@ class Validate_PL
         }
 
         return true;
+    }
+
+    /**
+     * Validates a PL Postal Code format (ZIP code)
+     *
+     * @param string $postalCode the ZIP code to validate
+     * @param bool   $strong     optional; strong checks (e.g. against a list 
+     *                           of postcodes) (not implanted)
+     *
+     * @return boolean TRUE if code is valid, FALSE otherwise
+     * @see http://pl.wikipedia.org/wiki/Kod_pocztowy#Kody_pocztowe_w_Polsce
+     */
+    function postalCode($postalCode, $strong = false)
+    {
+        return (bool)preg_match('/^\d{2}-\d{3}$/', $postalCode);
+    }
+
+    /**
+     * Validates a car registration number
+     *
+     * @param string $reg the registration number
+     *
+     * @return bool
+     * @see http://pl.wikipedia.org/wiki/Polskie_tablice_rejestracyjne
+     */
+    function carReg($reg)
+    {
+        $pregs = array(
+            // 2 letter district
+            "[a-z]{2}\d{5}",
+            "[a-z]{2}\d{4}[a-z]{1}",
+            "[a-z]{2}\d{3}[a-z]{2}",
+            "[a-z]{2}\d{1}[a-z]{1}\d{3}",
+            "[a-z]{2}\d{1}[a-z]{2}\d{2}",
+
+            // 3 letter district
+            "[a-z]{3}[a-z]{1}\d{3}",
+            "[a-z]{3}\d{2}[a-z]{2}",
+            "[a-z]{3}\d{1}[a-z]{1}\d{2}",
+            "[a-z]{3}\d{2}[a-z]{1}\d{1}",
+            "[a-z]{3}\d{1}[a-z]{2}\d{1}",
+            "[a-z]{3}[a-z]{2}\d{2}",
+            "[a-z]{3}\d{5}",
+            "[a-z]{3}\d{4}[a-z]{1}",
+            "[a-z]{3}\d{3}[a-z]{2}",
+            "[a-z]{3}[a-z]{1}\d{2}[a-z]{1}",
+            "[a-z]{3}[a-z]{1}\d{1}[a-z]{2}",
+
+            // bikes
+            "[a-z]{2}\d{4}",
+            "[a-z]{2}\d{3}[a-z]{1}",
+            "[a-z]{3}[a-z]{1}\d{3}", // deprecated
+
+            // temporaty
+            "[a-z]{1}\d{1}\d{4}",
+            "[a-z]{1}\d{1}\d{3}B",
+
+            // individual
+            "[a-z]{1}\d{1}[a-z]{3}[a-z0-9]{0,2}",
+
+            // classic
+            "[a-z]{2}\d{2}[a-z]{1}",
+            "[a-z]{2}\d{3}",
+            "[a-z]{3}\d{1}[a-z]{1}",
+            "[a-z]{3}\d{2}",
+            "[a-z]{3}[a-z]{1}\d{1}",
+
+            // diplomatic
+            "W\d{6}",
+
+            // military
+            "U[abcdegijk]\d{4,5}T?",
+
+            // special services
+            "H[apmwkbcsn][a-z][a-z]{1}\d{3}",
+            "H[apmwkbcsn][a-z]\d{2}[a-z]{2}");
+        foreach ($pregs as $preg) {
+            if (preg_match('/^'.$preg.'$/i', $reg)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 ?>
